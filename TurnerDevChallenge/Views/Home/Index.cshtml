@@ -1,0 +1,49 @@
+﻿@model TurnerDevChallenge.Models.TitlesViewModel
+
+@section scripts {
+    @Scripts.Render("~/bundles/app")
+}
+@{
+    if (!String.IsNullOrEmpty(Model.SearchString))
+    {
+        ViewData["Title"] = "Search - " + Model.SearchString;
+
+    }
+    else
+    {
+        ViewData["Title"] = "Home Page";
+    }
+}
+
+<h2>Film Search</h2>
+<body class="info-panel">
+    <form asp-action="Index" method="get" autocomplete="off">
+        <p>
+            Search by name: <input type="text" id="SearchString" name="SearchString" value="@Model.SearchString" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            @Html.ActionLink("Clear", "Index", "Home", new { area = "" })
+        </p>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: titles">
+            <tr>
+                <td>
+                    <span data-bind="text: TitleName"></span>
+                </td>
+                <td>
+                    <a data-bind="attr: { href: Url }">Details</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>

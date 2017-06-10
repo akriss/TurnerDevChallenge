@@ -1,0 +1,217 @@
+﻿@model TurnerDevChallenge.Models.DetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Title.TitleName;
+}
+
+<body class="info-panel">
+    <div class="title-header">
+        <div class="header-text">
+            <h1>@Model.Title.TitleName <small>(@Model.Title.ReleaseYear)</small></h1>
+            <div>
+                @Model.PrintGenreNames()
+                <div class="processed-time">Processed: @Model.Title.ProcessedDateTimeUTC.Value.ToLocalTime()</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel details-body">
+        <div class="panel-heading">
+            <h3 class="header">
+                Storylines
+            </h3>
+        </div>
+        <div class="panel-body">
+            @foreach (var summary in Model.Title.StoryLine)
+            {
+                <div class="row-fluid">
+                    <h4 class="sub-header">@summary.Type - <small>@summary.PrintLanguageString()</small></h4>
+                    <span>@summary.Description</span>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="panel details-body">
+        <div class="panel-heading">
+            <h3 class="header">
+                Awards
+            </h3>
+        </div>
+        @if (Model.Title.Award.Count() > 0)
+        {
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Organization
+                            </th>
+                            <th>
+                                Award
+                            </th>
+                            <th>
+                                Year
+                            </th>
+                            <th>
+                                Won or Nominated
+                            </th>
+                        </tr>
+                    </thead>
+                    @foreach (var award in Model.Title.Award.OrderBy(x => x.AwardYear).ThenBy(x => x.AwardCompany).ThenBy(x => x.AwardName))
+                    {
+                        <tr>
+                            <td>
+                                @award.AwardCompany
+                            </td>
+                            <td>
+                                @award.AwardName
+                            </td>
+                            <td>
+                                @award.AwardYear
+                            </td>
+                            @if (award.AwardWon.HasValue && award.AwardWon.Value)
+                            {
+                                <td class="award-won">
+                                    Won
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="award-nominated">
+                                    Nominated
+                                </td>
+                            }
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="panel-body">None</div>
+        }
+    </div>
+
+    <div class="panel details-body">
+        <div class="panel-heading">
+            <h3 class="header">
+                Other Names
+            </h3>
+        </div>
+        @if (Model.Title.OtherName.Count() > 0)
+        {
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Type
+                            </th>
+                            <th>
+                                Language
+                            </th>
+                        </tr>
+                    </thead>
+                    @foreach (var name in Model.Title.OtherName.OrderBy(x => x.TitleNameSortable))
+                    {
+                        <tr>
+                            <td>
+                                @name.TitleName
+                            </td>
+                            <td>
+                                @name.TitleNameType
+                            </td>
+                            <td>
+                                @name.PrintLanguageString()
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="panel-body">None</div>
+        }
+    </div>
+
+
+
+    <div class="panel details-body">
+        <div class="panel-heading">
+            <h3 class="header">
+                Participants
+            </h3>
+        </div>
+        @if (Model.Title.TitleParticipant.Count() > 0)
+        {
+            <div class="panel-body">
+                <div ng-app="MyApp" ng-controller="MyController">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Participant Type
+                                </th>
+                                <th>
+                                    Key Role
+                                </th>
+                                <th>
+                                    On Screen
+                                </th>
+                                <th>
+                                    Role Type
+                                </th>
+                            </tr>
+                        </thead>
+                        @foreach (var participant in Model.Title.TitleParticipant.OrderByDescending(x => x.IsKey).ThenBy(x => x.Participant.Name))
+                        {
+                            <tr @(!participant.IsKey ? "ng-show=IsVisible" : "" )>
+                                <td>
+                                    @participant.Participant.Name
+                                </td>
+                                <td>
+                                    @participant.Participant.ParticipantType
+                                </td>
+                                <td>
+                                    @(participant.IsKey ? "Yes" : "No")
+                                </td>
+                                <td>
+                                    @(participant.IsOnScreen ? "Yes" : "No")
+                                </td>
+                                <td>
+                                    @participant.RoleType
+                                </td>
+                            </tr>
+                        }
+                    </table>
+
+                    <a class="link" ng-click="ShowHide()">{{showButtonText}}</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="panel-body">None</div>
+        }
+    </div>
+</body>
+
+<script>
+    app = angular.module('MyApp', []);
+    app.controller('MyController', function ($scope) {
+        $scope.IsVisible = false;
+        $scope.ShowHide = function () {
+            $scope.IsVisible = $scope.IsVisible ? false : true;
+            $scope.showButtonText = $scope.IsVisible ? "Show Fewer" : "Show More";
+        };
+        $scope.showButtonText = "Show More";
+    });
+</script>
