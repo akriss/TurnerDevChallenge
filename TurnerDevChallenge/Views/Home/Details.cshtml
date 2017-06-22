@@ -1,0 +1,170 @@
+﻿@model TurnerDevChallenge.Models.DetailsViewModel
+
+<html ng-app="DetailsApp" ng-controller="DetailsController">
+
+<head>
+    @Scripts.Render("~/Scripts/Details.js")
+</head>
+
+<body class="info-panel" ng-app="DetailsApp" ng-controller="DetailsController">
+    <div class="title-header">
+        <div class="header-text">
+            <h1>{{model.title}} <small>({{model.releaseYear}})</small></h1>
+            <div>
+               {{model.genres}}
+                <div class="processed-time">Processed: {{ model.processedDateTime | date:'medium'}} </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="panel details-body">
+        <div class="panel-heading">
+            <h3 class="header">
+                Storylines
+            </h3>
+        </div>
+        <div class="panel-body" ng-repeat="story in model.storyLines">
+            <div class="row-fluid">
+                <h4 class="sub-header">{{story.type}} - <small>{{story.language}}</small></h4>
+                <span>{{story.description}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="panel details-body">
+        <div class="panel-heading">
+            <h3 class="header">
+                Awards
+            </h3>
+    </div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Organization
+                        </th>
+                        <th>
+                            Award
+                        </th>
+                        <th>
+                            Year
+                        </th>
+                        <th>
+                            Won or Nominated
+                        </th>
+                    </tr>
+                </thead>
+                <tbody ng-repeat="award in model.awards">
+                    <tr>
+                        <td>
+                            {{award.awardCompany}}
+                        </td>
+                        <td>
+                            {{award.awardName}}
+                        </td>
+                        <td>
+                            {{award.awardYear}}
+                        </td>
+                        <td>
+                            {{award.awardWon}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel details-body">
+        <div class="panel-heading">
+            <h3 class="header">
+                Other Names
+            </h3>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Type
+                        </th>
+                        <th>
+                            Language
+                        </th>
+                    </tr>
+                </thead>
+                <tbody ng-repeat="name in model.otherNames">
+                    <tr>
+                        <td>
+                            {{name.name}}
+                        </td>
+                        <td>
+                            {{name.type}}
+                        </td>
+                        <td>
+                            {{name.language}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel details-body">
+        <div class="panel-heading">
+            <h3 class="header">
+                Participants
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Participant Type
+                            </th>
+                            <th>
+                                Key Role
+                            </th>
+                            <th>
+                                On Screen
+                            </th>
+                            <th>
+                                Role Type
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody ng-repeat="participant in model.participants | orderBy:'-name'">
+                        <tr ng-if="participant.isKey=='True' || IsVisible">
+                            <td>
+                                {{participant.name}}
+                            </td>
+                            <td>
+                                {{participant.type}}
+                            </td>
+                            <td>
+                                {{participant.isKey}}
+                            </td>
+                            <td>
+                                {{participant.isOnScreen}}
+                            </td>
+                            <td>
+                                {{participant.roleType}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <a class="link" ng-click="ShowHide()">{{showButtonText}}</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

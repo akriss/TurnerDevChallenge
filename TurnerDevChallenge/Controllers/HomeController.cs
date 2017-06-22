@@ -23,7 +23,9 @@ namespace TurnerDevChallenge.Controllers
 
         public ActionResult Details()
         {
-            return PartialView("Details");
+            ViewBag.Title = "Details";
+            
+            return View();
         }
     }
 }

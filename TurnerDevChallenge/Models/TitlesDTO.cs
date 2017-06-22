@@ -22,7 +22,9 @@ namespace TurnerDevChallenge.Models
         public string TitleNameSortable { get; set; }
         public int? TitleTypeId { get; set; }
         public int? ReleaseYear { get; set; }
+        public string GenreNames { get; set; }
         public DateTime? ProcessedDateTimeUTC { get; set; }
+        public DateTime? ProcessedDateTimeLocal { get; set; }
 
         public ICollection<StoryLine> StoryLine { get; set; }
         public ICollection<Award> Award { get; set; }

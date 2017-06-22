@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Description;
 using TurnerDevChallenge.Models;
-using TurnerDevChallenge.Utils;
 
 namespace TurnerDevChallenge.Controllers
 {
@@ -38,7 +34,7 @@ namespace TurnerDevChallenge.Controllers
             var result = titles.ToList();
             foreach(var title in result)
             {
-                title.Url = UrlCleaner.CleanUrl(Url.Link("", new { controller = "Details", titleId = title.TitleId }));
+                title.Url = Url.Link("Default", new { controller = "Home", action = "Details", titleId = title.TitleId });
             }
             return result;
         }
